@@ -128,3 +128,30 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# weather bot
+weatherBot/node_modules
+weatherBot/.env
+weatherBot/package-lock.json
+
+# telegram console sender 
+telegramConsoleSender/node_modules
+telegramConsoleSender/.env
+telegramConsoleSender/package-lock.json
+
+#google drive uploader
+GoogleDriveUploader/node_modules
+GoogleDriveUploader/.env
+GoogleDriveUploader/package-lock.json
+GoogleDriveUploader/TOKEN.json
+
+# echo bot
+echoBot/node_modules
+echoBot/.env
+echoBot/package-lock.json
+echoBot/response.txt
+
+# currency weather forecast bot 
+CurrencyWeatherForecastBot/node_modules
+CurrencyWeatherForecastBot/.env
+CurrencyWeatherForecastBot/package-lock.json
