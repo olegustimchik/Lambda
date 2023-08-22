@@ -1,0 +1,10 @@
+{"userName": "Oleh", "gender": "male", "age": 19}
+{"userName":"Ares","gender":"male","age":17}
+{"userName":"User","gender":"male","age":12}
+{"userName":"Name","gender":"male","age":0}
+{"userName":"John","gender":"male","age":45}
+{"userName":"Olena","gender":"female","age":123}
+{"userName":"Newuser","gender":"male","age":34}
+{"userName":"Frank","gender":"male","age":19}
+{"userName":"Kreker","gender":"male","age":89}
+{"userName":"Anna","gender":"female","age":28}
