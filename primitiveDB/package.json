@@ -1,0 +1,17 @@
+{
+  "name": "primitivedb",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": "./CLI.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^9.2.7",
+    "inquirer-interrupted-prompt": "^3.0.0",
+    "inquirer-loop": "^0.3.0"
+  }
+}
