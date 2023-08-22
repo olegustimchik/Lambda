@@ -1,0 +1,23 @@
+{
+  "name": "googledriveuploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "CLI.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "googleapis": "^122.0.0",
+    "inquirer": "^9.2.8",
+    "inquirer-interrupted-prompt": "^3.0.0",
+    "mime-types": "^2.1.35",
+    "mimetype": "^0.0.8",
+    "util": "^0.12.5"
+  }
+}
