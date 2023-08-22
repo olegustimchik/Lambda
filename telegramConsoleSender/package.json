@@ -1,0 +1,20 @@
+{
+  "name": "telegramconsolesender",
+  "version": "1.0.0",
+  "description": "this CLI-app receive comand from console. Then based on received comand the bot will send some information",
+  "main": "./CLI.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "mime-type": "^4.0.0",
+    "mime-types": "^2.1.35",
+    "node-telegram-bot-api": "^0.61.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
