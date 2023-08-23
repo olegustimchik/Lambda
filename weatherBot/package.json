@@ -1,0 +1,21 @@
+{
+  "name": "weather_bot",
+  "version": "1.0.0",
+  "description": "show weather forecast in Kiyv",
+  "main": "./weather-bot.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "mime-type": "^4.0.0",
+    "mime-types": "^2.1.35",
+    "node-telegram-bot-api": "^0.61.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
