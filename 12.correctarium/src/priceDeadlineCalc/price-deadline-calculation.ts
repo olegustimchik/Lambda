@@ -1,3 +1,4 @@
+import { BlobOptions } from "buffer";
 import { stringify } from "querystring";
 
 const dateFormat: Intl.DateTimeFormatOptions = {
@@ -75,13 +76,19 @@ export default class PriceAndDeadline {
     convertToMilliseconds(hours: number = 0, minutes: number = 0, seconds: number = 0): number {
         return ((hours) * 60 * 60 + (minutes) * 60 + (seconds)) * 1000;
     }
+
+    checkWorkDate(date: Date): boolean {
+        return (date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 >= this.startTime) &&
+            (date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 <= this.endTime) &&
+            (1 <= date.getDay()) && (date.getDay() <= 5); 
+    }
     /**
      * @param time  number. The time(in hours) needed by the employee. 
      * @param date  date object 
      * @returns true if passed date is working day and hours, otherwise false  
      */
     isWorkingTime(date: Date, time: number): boolean {
-        return ((date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 + time * 60 >= this.startTime) &&
+        return this.checkWorkDate(date) && ((date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 + time * 60 >= this.startTime) &&
             (date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60 + time * 60 <= this.endTime) &&
             (1 <= date.getDay()) && (date.getDay() <= 5));
 
