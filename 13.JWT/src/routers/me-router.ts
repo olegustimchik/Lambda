@@ -10,12 +10,12 @@ meRouter.get(/\me[0-9]$/, async (req, res) => {
         if (user.userEmail) {
             const count = await userModel.getUserRequests(user.userEmail);
             console.log(await userModel.updateUserRequests(user.userEmail, count + 1));
-            res.send({ "count": count });
-        } else  {
-            res.send(401); 
+            res.send({ "request_num": count, data: { "login": user.userEmail } });
+        } else {
+            res.send(401);
         }
     } catch (error) {
-        console.log(error); 
+        console.log(error);
         return res.sendStatus(500);
     }
 })
