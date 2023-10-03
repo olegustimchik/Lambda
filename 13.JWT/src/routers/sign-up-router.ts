@@ -6,7 +6,7 @@ sighUpRouter.post("/sign_up", async (req, res) => {
         try {
                 const userDBModel = new UserDBModel();
                 const data = req.body;
-                if (data.email && data.password) {
+                if (data.email && data.password && !(await userDBModel.checkUserInDB(data.email, data.password))) {
                         userDBModel.insertNewUserInDB(data.email, data.password);
                         res.sendStatus(200);
                 } else {

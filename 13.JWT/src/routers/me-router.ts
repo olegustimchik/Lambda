@@ -9,7 +9,7 @@ meRouter.get(/\me[0-9]$/, async (req, res) => {
         const user = jwt.verify(req.headers.authorization.split(" ")[1], process.env.SECRET);
         if (user.userEmail) {
             const count = await userModel.getUserRequests(user.userEmail);
-            console.log(await userModel.updateUserRequests(user.userEmail, count + 1));
+            await userModel.updateUserRequests(user.userEmail, count + 1);
             res.send({ "request_num": count, data: { "login": user.userEmail } });
         } else {
             res.send(401);
