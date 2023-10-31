@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import { coinRouter } from "./src/routers/coin-router.js"
 import { marketRouter } from "./src/routers/market-router.js";
 import { saveRouter } from "./src/routers/save.js";
+import { cryptocurrencyInfoRouter } from "./src/routers/cryptocurrency-info-router.js";
 import { cronJob } from "./src/cronFold/job.js"
 import * as dotenv from "dotenv";
 import { allowedNodeEnvironmentFlags } from 'process';
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(cryptocurrencyInfoRouter); 
 app.use(marketRouter);
 app.use(coinRouter);
 app.use(saveRouter);
