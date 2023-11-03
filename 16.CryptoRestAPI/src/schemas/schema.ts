@@ -15,7 +15,6 @@ export const markets = mysqlTable("markets", {
 });
 
 export const marketPrices = mysqlTable("market_prices", {
-    id: int("id").autoincrement().primaryKey().notNull(),
     price: decimal("price", { precision: 20, scale: 10 }).notNull(),
     fetchDate: datetime("fetch_date"), 
     coinId: int("coin_id").references(() => coins.id),

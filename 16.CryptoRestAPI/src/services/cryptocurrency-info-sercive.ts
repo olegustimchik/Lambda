@@ -2,7 +2,6 @@ import { CoinModel, MarketModel, MarketPricesModel } from "../models/models.ts";
 import { MarketPriceTypeInsert, MarketPriceTypeSelect, CoinTypeInsert, CoinTypeSelect, MarketTypeInsert, MarketTypeSelect } from "../types/types.ts";
 import { CurrencyInformation, CurrencyDetail } from "../types/currency-response.ts";
 import { dbConnection } from "../connection/db.ts";
-import { ApiError } from "../types/api-error.ts";
 const coinModel = new CoinModel(dbConnection);
 const marketModel = new MarketModel(dbConnection);
 const marketPricesModel = new MarketPricesModel(dbConnection);
