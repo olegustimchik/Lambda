@@ -5,7 +5,6 @@ import { saveRouter } from "./src/routers/save.js";
 import { cryptocurrencyInfoRouter } from "./src/routers/cryptocurrency-info-router.js";
 import { cronJob } from "./src/cronFold/job.js"
 import * as dotenv from "dotenv";
-import { allowedNodeEnvironmentFlags } from 'process';
 dotenv.config();
 const app: Express = express();
 const port: string = process.env.PORT || "3000";

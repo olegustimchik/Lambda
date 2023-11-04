@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { coins, coinCodes } from "./cryptocurrencies.ts";
+import { coinCodes } from "./cryptocurrencies.ts";
 import { CoinMarketCapResponse } from "../types/marketsResponse/coin-market-cap-response.ts";
 import { Market } from "./market.ts";
 import { Rate } from "../types/rate.ts";
@@ -19,7 +19,9 @@ export class CoinMarketCap extends Market {
         let coinsData: Rate[] = [];
         await this.createRequests().then((result) => {
             Object.values<CoinMarketCapResponse[]>(result.data.data).forEach((item) => {
-                coinsData.push({ coinSymbol: item[0].symbol, price: item[0].quote.USD.price, baseCurrency: "USD" });
+                if (item.length > 0) {
+                    coinsData.push({ coinSymbol: item[0].symbol, price: item[0].quote.USD.price, baseCurrency: "USD" });
+                }
             });
         }).catch((err) => {
             throw new Error(err);

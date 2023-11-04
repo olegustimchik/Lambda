@@ -16,7 +16,6 @@ export async function currencyInfo(coinSymbol: string, marketName: string, perio
         markets = await marketModel.selectAll().catch((err) => {
             throw new Error(err);
         });
-        console.log(coins);
         const marketPricesInf = await marketPricesModel.averagePrice(coins[0].id, period).then((data): CurrencyInformation => {
             return { coin: coins.pop()?.coinSymbol, coinId: coins.pop()?.id, markets: markets, details: data.map<CurrencyDetail>((elem) => { return { price: elem.price, date: Date.parse(elem.fetch_date) } }) }
         }).catch((err) => {

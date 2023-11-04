@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { coins, coinCodes } from "./cryptocurrencies.ts";
+import { coinCodes } from "./cryptocurrencies.ts";
 import { Market } from "./market.ts";
 import { Rate } from "../types/rate.ts";
 const url = "https://api.kucoin.com";

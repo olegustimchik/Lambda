@@ -1,7 +1,38 @@
 import { MySqlDate } from "drizzle-orm/mysql-core";
 
-const coins: string[] = ["bitcoin", "ethereum", "binance-coin", "quant"];
-const coinCodes: string[] = ["BTC", "ETH", "BNB", "QNT"];
-const coinListForPaprika: string[] = ["btc-bitcoin", "eth-ethereum", "bnb-binance-coin", "qnt-quant" ]; 
 
-export { coins, coinCodes, coinListForPaprika }; 
+const coinCodes: string[] = [
+    "BTC", 
+    "ETH", 
+    "BNB", 
+    "QNT", 
+    "SOL", 
+    "XRP", 
+    "DOGE", 
+    "TRX", 
+    "TON",
+    "LINK", 
+    "LTC", 
+    "OP", 
+    "APT", 
+    "SHIB", 
+    "ATOM", 
+    "INJ", 
+    "ARB", 
+    "LDO", 
+    "KAS", 
+    "KAVA",
+    "GALA", 
+    "TWT", 
+    "MATIC", 
+    "STETH", 
+    "LEO", 
+    "UNI", 
+    "NEO", 
+    "GMX",
+    "SUI", 
+    "DYDX", 
+    "FIL"
+];
+
+export { coinCodes }; 

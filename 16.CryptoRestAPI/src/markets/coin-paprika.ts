@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { coins, coinCodes, coinListForPaprika } from "./cryptocurrencies.ts";
+import { coinCodes } from "./cryptocurrencies.ts";
 import { Rate } from "../types/rate.ts";
 import { Market } from "./market.ts";
 import { CoinPaprikaResponse } from "../types/marketsResponse/coin-paprike-response.ts";

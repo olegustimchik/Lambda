@@ -1,14 +1,10 @@
+
 export function getMinutesFromPeriod(period: string): number {
-    switch (period) {
-        case "15m":
-            return 15;
-        case "1h":
-            return 60;
-        case "4h":
-            return 240;
-        case "24h":
-            return 1440;
-        default:
-            return 15;
+    let minutes = 0;
+
+    if (period.includes("h") || period.includes("m")) {
+        const array = period.split("h");
+        minutes += Number(array[0]) * 60 || Number(array[0].split("m")[0]);
     }
+    return minutes;
 }
