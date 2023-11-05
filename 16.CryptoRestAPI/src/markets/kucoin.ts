@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { coins, coinCodes } from "./cryptocurrencies.ts";
+import { coinCodes } from "./cryptocurrencies.ts";
 import { Market } from "./market.ts";
 import { Rate } from "../types/rate.ts";
 const url = "https://api.kucoin.com";
@@ -9,15 +9,14 @@ export class Kucoin extends Market {
         super(url, {});
     }
 
-    createRequests(): Promise<AxiosResponse<any, any>>[] {
-        const kucoinRequests: Promise<AxiosResponse>[] = [this.instance.get("/api/v1/prices", { params: { "currencies": coinCodes.join(","), "base": "USD" } })];
-        return kucoinRequests;
+    createRequests(): Promise<AxiosResponse<any, any>> {
+        return this.instance.get("/api/v1/prices", { params: { "currencies": coinCodes.join(","), "base": "USD" } });
     }
 
     async getData(): Promise<Rate[]> {
         let coinsData: Rate[] = [];
-        await Promise.all(this.createRequests()).then((result) => {
-            for (const [key, value] of Object.entries(result[0].data.data)) {
+        await this.createRequests().then((result) => {
+            for (const [key, value] of Object.entries(result.data.data)) {
                 coinsData.push({ coinSymbol: key, price: Number(value), baseCurrency: "USD" });
             }
         }).catch((err) => {

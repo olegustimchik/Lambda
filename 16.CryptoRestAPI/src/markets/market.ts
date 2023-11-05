@@ -9,6 +9,6 @@ export abstract class Market {
         })
     }
 
-    abstract createRequests(): Promise<AxiosResponse>[];
+    abstract createRequests(): Promise<AxiosResponse>;
     abstract getData(): Promise<Rate[]>;
 }

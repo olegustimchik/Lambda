@@ -8,6 +8,7 @@
     "start": "nodemon app.ts",
     "migration:generate": "drizzle-kit generate:mysql ",
     "migration:push": "drizzle-kit push:mysql",
+    "migration:up": "drizzle-kit up:mysql" , 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

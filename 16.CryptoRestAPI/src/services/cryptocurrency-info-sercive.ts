@@ -2,7 +2,6 @@ import { CoinModel, MarketModel, MarketPricesModel } from "../models/models.ts";
 import { MarketPriceTypeInsert, MarketPriceTypeSelect, CoinTypeInsert, CoinTypeSelect, MarketTypeInsert, MarketTypeSelect } from "../types/types.ts";
 import { CurrencyInformation, CurrencyDetail } from "../types/currency-response.ts";
 import { dbConnection } from "../connection/db.ts";
-import { ApiError } from "../types/api-error.ts";
 const coinModel = new CoinModel(dbConnection);
 const marketModel = new MarketModel(dbConnection);
 const marketPricesModel = new MarketPricesModel(dbConnection);
@@ -17,7 +16,6 @@ export async function currencyInfo(coinSymbol: string, marketName: string, perio
         markets = await marketModel.selectAll().catch((err) => {
             throw new Error(err);
         });
-        console.log(coins);
         const marketPricesInf = await marketPricesModel.averagePrice(coins[0].id, period).then((data): CurrencyInformation => {
             return { coin: coins.pop()?.coinSymbol, coinId: coins.pop()?.id, markets: markets, details: data.map<CurrencyDetail>((elem) => { return { price: elem.price, date: Date.parse(elem.fetch_date) } }) }
         }).catch((err) => {

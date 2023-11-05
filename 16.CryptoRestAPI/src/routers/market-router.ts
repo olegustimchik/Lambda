@@ -1,13 +1,14 @@
+import { marketsList } from "../services/markets-service.ts";
 import express from "express";
-import { MarketModel } from "../models/models.ts";
-import { dbConnection } from "../connection/db.ts";
-
-import { MarketTypeInsert, MarketTypeSelect } from "../types/types.ts";
 const marketRouter = express.Router();
-const marketModel = new MarketModel(dbConnection);
 
 marketRouter.get("/markets", async (req, res) => {
-    
+    marketsList().then((markets) => {
+        res.send(markets);
+    }).catch((err) => {
+        console.log(err);
+        res.sendStatus(502);
+    })
 });
 
 
