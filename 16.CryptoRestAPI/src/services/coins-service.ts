@@ -9,3 +9,14 @@ export async function coinsList() {
     });
     return coins === null ? [] : coins;
 }
+
+export async function coinBySymbol(coin: string) {
+    const coins = await coinModel.selectByCoinSymbol(coin).catch((err) => {
+        console.log(err);
+        return null;
+    });
+    return coins === null ? [] : coins;
+}
+
+
+
