@@ -1,0 +1,48 @@
+{
+    "version": "5",
+    "dialect": "mysql",
+    "id": "76c0c57d-7a44-46e6-8987-df614c23f6d7",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "tables": {
+        "shorten_links": {
+            "name": "shorten_links",
+            "columns": {
+                "shorten": {
+                    "name": "shorten",
+                    "type": "varchar(10)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "coin_symbol": {
+                    "name": "coin_symbol",
+                    "type": "varchar(25)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "unique_shorten_link": {
+                    "name": "unique_shorten_link",
+                    "columns": ["shorten"],
+                    "isUnique": true
+                },
+                "unique_link": {
+                    "name": "unique_link",
+                    "columns": ["coin_symbol"],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        }
+    },
+    "schemas": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    }
+}
