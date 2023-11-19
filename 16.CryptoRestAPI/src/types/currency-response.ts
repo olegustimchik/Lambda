@@ -9,6 +9,5 @@ export type CurrencyDetail = {
 export type CurrencyInformation = {
     coin: string | undefined;
     coinId: number | undefined;
-    markets: MarketTypeSelect[];
     details: CurrencyDetail;
 }

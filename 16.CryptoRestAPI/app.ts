@@ -1,15 +1,37 @@
 import express, { Express, Request, Response } from 'express';
-import { coinRouter } from "./src/routers/coin-router.js"
-import { marketRouter } from "./src/routers/market-router.js";
-import { saveRouter } from "./src/routers/save.js";
-import { cryptocurrencyInfoRouter } from "./src/routers/cryptocurrency-info-router.js";
-import { cronJob } from "./src/cronFold/job.js"
+import { dbConnection } from "./src/connection/db.ts";
+import { CoinRepository } from "./src/repositories/coin-repository.ts";
+import { MarketRepository } from "./src/repositories/market-repository.ts";
+import { MarketPricesRepository } from "./src/repositories/market-prices-repository.ts";
+import { CoinService } from "./src/services/coin-service.ts";
+import { MarketService } from "./src/services/markets-service.ts"
+import { MarketPricesService } from "./src/services/market-prices-service.ts"
+import { CoinController } from "./src/controllers/coin-controller.ts"
+import { MarketController } from "./src/controllers/markets-controller.ts"
+import { MarketPricesController } from "./src/controllers/market-price-controller.ts"
+import { SaveDataFromMarketController } from "./src/controllers/save-data-from-market-controller.ts"
+import { CronScheduler } from "./src/cronFold/job.ts";
 import * as dotenv from "dotenv";
 dotenv.config();
+
+const coinRepository = new CoinRepository(dbConnection);
+const coinService = new CoinService(coinRepository);
+const coinController = new CoinController(coinService);
+
+const marketRepository = new MarketRepository(dbConnection);
+const marketService = new MarketService(marketRepository);
+const marketController = new MarketController(marketService);
+
+const marketPricesRepository = new MarketPricesRepository(dbConnection);
+const marketPricesService = new MarketPricesService(marketPricesRepository);
+const marketPricesController = new MarketPricesController(marketPricesService, marketService, coinService);
+
+const saveDataFromMarket = new SaveDataFromMarketController(coinService, marketService, marketPricesService); 
+const cronScheduler = new CronScheduler(saveDataFromMarket);
+
 const app: Express = express();
 const port: string = process.env.PORT || "3000";
 
-cronJob.start();
 app.use(express.json({ "limit": "100kb" }));
 app.use(express.urlencoded({ "extended": false }));
 app.use((req, res, next) => {
@@ -17,10 +39,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cryptocurrencyInfoRouter); 
-app.use(marketRouter);
-app.use(coinRouter);
-app.use(saveRouter);
+cronScheduler.start(); 
+app.use(coinController.getRouter());
+app.use(marketController.getRoute());
+app.use(marketPricesController.getRouter());
+
 app.get("/", (req, res, next) => {
     const date = new Date();
     let dateString = date.toISOString();

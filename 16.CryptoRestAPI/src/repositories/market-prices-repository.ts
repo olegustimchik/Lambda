@@ -1,15 +1,15 @@
 import { marketPrices, markets } from "../schemas/schema.ts";
-import { MarketPriceTypeInsert, MarketPriceTypeSelect, MarketPricesInnerJoinMarkets } from "../types/types.ts";
+import { MarketPriceTypeInsert, MarketPriceTypeSelect } from "../types/types.ts";
 import type { MySql2Database, MySqlRawQueryResult } from 'drizzle-orm/mysql2';
 import { eq, and, desc, sql } from "drizzle-orm";
 
-export class MarketPricesModel {
+export class MarketPricesRepository {
     private dbConnection: MySql2Database;
     constructor(dbConnection: MySql2Database) {
         this.dbConnection = dbConnection;
     }
 
-    async insert(marketPrice: MarketPriceTypeInsert): Promise<void | MySqlRawQueryResult> {
+    async insertInto(marketPrice: MarketPriceTypeInsert): Promise<void | MySqlRawQueryResult> {
         return this.dbConnection.insert(marketPrices).values(marketPrice);
     }
 

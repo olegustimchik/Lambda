@@ -3,7 +3,7 @@ import { MarketTypeInsert, MarketTypeSelect } from "../types/types.ts";
 import type { MySql2Database, MySqlRawQueryResult } from 'drizzle-orm/mysql2';
 import { eq } from "drizzle-orm";
 
-export class MarketModel {
+export class MarketRepository {
     private dbConnection: MySql2Database;
     constructor(dbConnection: MySql2Database) {
         this.dbConnection = dbConnection;
