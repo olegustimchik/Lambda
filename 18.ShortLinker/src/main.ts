@@ -20,13 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use(controller.getRouter());
-app.get("/", (req, res, next) => {
-    const date = new Date();
-    let dateString = date.toISOString();
-    dateString = dateString.replace("T", " ");
-    dateString = dateString.replace("Z", "");
-    console.log(dateString);
-});
+
 app.use(function (req, res, next) {
     var err: Error = new Error("Not Found");
     next(err);
