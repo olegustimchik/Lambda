@@ -4,6 +4,17 @@ declare global {
     interface Array<T> {
         /**
          * 
+         * @param predicate A function that accepts one parameter. The all method calls the predicate function one time for each element in the array
+         * @returns returns true if all elements match the given predicate
+         */
+        all(predicate: (elem: T) => boolean): boolean;
+        /**
+         * @param predicate A function that accepts one parameter. The any method calls the predicate function one time for each element in the array
+         * @returns true if sequence has at least one element
+         */
+        any(predicate: (elem: T) => boolean): boolean;
+        /**
+         * 
          * @param keySelector function that creates index for each element
          * @returns Returns a Map containing the elements from the given sequence indexed by the key returned from keySelector function applied to each elemen
          */
@@ -93,6 +104,40 @@ declare global {
         groupByTransformer<K, V>(selector: (elem: T) => K, valueTransform: (elem: T) => V): Map<K, V[] | T[]>;
     }
 }
+
+Object.defineProperties(Array.prototype, {
+    all: {
+        value: function <T>(this: T[], predicate: (elem: T) => boolean): boolean {
+            if(this.length < 1){ 
+                return false; 
+            }
+            for(const elem of this){ 
+                if (!predicate(elem)){ 
+                    return false; 
+                }
+            }
+            return true; 
+        },
+        enumerable: true,
+    }
+});
+
+Object.defineProperties(Array.prototype, {
+    any: {
+        value: function <T>(this: T[], predicate: (elem: T) => boolean): boolean {
+            if(this.length < 1){ 
+                return false; 
+            }
+            for(const elem of this){ 
+                if (predicate(elem)){ 
+                    return true; 
+                }
+            }
+            return false; 
+        },
+        enumerable: true,
+    }
+});
 
 Object.defineProperties(Array.prototype, {
     associateBy: {
@@ -329,3 +374,4 @@ Object.defineProperties(Array.prototype, {
         enumerable: true,
     }
 });
+
