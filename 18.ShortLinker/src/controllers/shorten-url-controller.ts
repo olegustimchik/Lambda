@@ -29,7 +29,7 @@ export class ShortenLinkController {
                     .then(async (data) => {
                         const link = await data.shortenLinks;
                         res.send({
-                            shortenLink: req.baseUrl + link[0].shorten,
+                            shortenLink: req.protocol + '://' + req.get('host') + "/" + link[0].shorten,
                         });
                     })
                     .catch((err) => {
@@ -50,13 +50,13 @@ export class ShortenLinkController {
             const shortenLinkResult = await originalLinks.shortenLinks;
             if (shortenLinkResult.length > 0) {
                 res.redirect(shortenLinkResult[0].link as string);
-                
+
             } else {
                 res.sendStatus(400).json({ error: "No such link" });
-                
+
             }
         } catch (err) {
-           // res.sendStatus(500);
+            // res.sendStatus(500);
         }
     };
     getRouter = () => {
