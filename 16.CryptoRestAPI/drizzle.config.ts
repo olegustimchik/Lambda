@@ -1,5 +1,5 @@
 import type { Config } from "drizzle-kit";
-import dataBaseConfig from "./src/configs/databaseConfigs.ts"
+import dataBaseConfig from "./src/configs/databaseConfigs.ts";
 
 export default {
     schema: "./src/schemas/schema.ts",
@@ -10,6 +10,6 @@ export default {
         password: dataBaseConfig.password,
         host: dataBaseConfig.host,
         port: dataBaseConfig.port,
-        database: dataBaseConfig.database
-    }
+        database: dataBaseConfig.database,
+    },
 } satisfies Config;

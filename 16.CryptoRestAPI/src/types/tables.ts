@@ -10,5 +10,5 @@ export type MarketPriceTypeSelect = typeof marketPrices.$inferSelect;
 
 export type MarketPricesInnerJoinMarkets = {
     market_prices: { price: string; fetchDate: Date | null; coinId: number | null; marketId: number | null };
-    markets: { id: number; marketName: string; };
-}
+    markets: { id: number; marketName: string };
+};

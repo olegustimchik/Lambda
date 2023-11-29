@@ -1,6 +1,6 @@
 import { markets } from "../schemas/schema.ts";
-import { MarketTypeInsert, MarketTypeSelect } from "../types/types.ts";
-import type { MySql2Database, MySqlRawQueryResult } from 'drizzle-orm/mysql2';
+import { MarketTypeInsert, MarketTypeSelect } from "../types/tables.ts";
+import type { MySql2Database, MySqlRawQueryResult } from "drizzle-orm/mysql2";
 import { eq } from "drizzle-orm";
 
 export class MarketRepository {
@@ -9,8 +9,11 @@ export class MarketRepository {
         this.dbConnection = dbConnection;
     }
 
-    async insertInto(market: MarketTypeInsert): Promise<void | MySqlRawQueryResult> {
-        return this.dbConnection.insert(markets).values(market).onDuplicateKeyUpdate({ set: { marketName: market.marketName } });
+    async insertOne(market: MarketTypeInsert): Promise<void | MySqlRawQueryResult> {
+        return this.dbConnection
+            .insert(markets)
+            .values(market)
+            .onDuplicateKeyUpdate({ set: { marketName: market.marketName } });
     }
 
     async selectAll(): Promise<MarketTypeSelect[]> {

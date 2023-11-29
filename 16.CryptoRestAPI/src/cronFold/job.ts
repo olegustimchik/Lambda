@@ -1,17 +1,19 @@
 import { CronJob } from "cron";
 import { MarketFactory } from "../markets/market-factory.ts";
-import { SaveDataFromMarketController } from "../controllers/save-data-from-market-controller.ts";
+import { SaveDataFromMarketController } from "../controllers/saveDataFromMarket.ts";
 const marketFactory = new MarketFactory();
 
 export class CronScheduler {
     private saveDataFromMarketController: SaveDataFromMarketController;
     private cronJob: CronJob;
-    constructor(saveDataFromMarketController: SaveDataFromMarketController) {
+    private frequency: number;
+    constructor(saveDataFromMarketController: SaveDataFromMarketController, frequency: number) {
         this.saveDataFromMarketController = saveDataFromMarketController;
-        this.cronJob = new CronJob('0 */05 * * * *', this.inEachFiveMinutes);
+        this.frequency = frequency;
+        this.cronJob = new CronJob(`0 */0${frequency} * * * *`, this.inEachPeriod);
     }
 
-    inEachFiveMinutes = () => {
+    inEachPeriod = () => {
         try {
             this.saveDataFromMarketController.saveDataFromMarket(marketFactory.getCoinBase(), "CoinBase");
             this.saveDataFromMarketController.saveDataFromMarket(marketFactory.getCoinPaprika(), "CoinPaprika");
@@ -22,11 +24,10 @@ export class CronScheduler {
             console.log(err);
         }
         const d = new Date();
-        console.log('Every 5 Minute:', d);
-    }
+        console.log(`Every ${this.frequency} Minute:`, d);
+    };
 
-    start = () => { 
+    start = () => {
         this.cronJob.start();
-    }
+    };
 }
-

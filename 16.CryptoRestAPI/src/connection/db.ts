@@ -7,7 +7,7 @@ const conn = await mysql.createConnection({
     user: dataBaseConfig.user,
     password: dataBaseConfig.password,
     port: dataBaseConfig.port,
-    database: dataBaseConfig.database
-})
+    database: dataBaseConfig.database,
+});
 
-export const dbConnection = drizzle(conn); 
+export const dbConnection = drizzle(conn);

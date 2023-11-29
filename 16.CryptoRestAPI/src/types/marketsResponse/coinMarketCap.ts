@@ -2,7 +2,7 @@ type Tag = {
     slug: string;
     name: string;
     category: string;
-}
+};
 
 type Quote = {
     USD: {
@@ -21,7 +21,7 @@ type Quote = {
         tvl: null | number;
         last_updated: string;
     };
-}
+};
 
 export type CoinMarketCapResponse = {
     id: string;
@@ -44,4 +44,4 @@ export type CoinMarketCapResponse = {
     tvl_ratio: null;
     last_updated: string;
     quote: Quote;
-}
+};

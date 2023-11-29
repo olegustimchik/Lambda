@@ -10,19 +10,21 @@ export class CoinBase extends Market {
     }
 
     createRequests(): Promise<AxiosResponse> {
-        return this.instance.get("v2/exchange-rates",);
+        return this.instance.get("v2/exchange-rates");
     }
 
-    async getData(): Promise<Rate[]> {
+    async getData(): Promise<Rate[] | undefined> {
         let coinsDate: Rate[] = [];
-        await this.createRequests().then((data) => {
+        try {
+            const { data } = await this.createRequests();
             coinCodes.forEach((coin) => {
-                if (data.data?.data.rates[coin]) {
-                    coinsDate.push({ coinSymbol: coin, price: 1 / Number(data.data?.data.rates[coin]), baseCurrency: "USD" });
+                if (data.data.rates[coin]) {
+                    coinsDate.push({ coinSymbol: coin, price: 1 / Number(data.data.rates[coin]), baseCurrency: "USD" });
                 }
             });
-        }).catch((err) => { throw Error(err.response.data) });
-        return coinsDate;
+            return coinsDate;
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
-

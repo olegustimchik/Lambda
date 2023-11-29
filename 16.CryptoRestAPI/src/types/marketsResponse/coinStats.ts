@@ -17,4 +17,4 @@ export type CoinStatsResponse = {
     websiteUrl: string;
     twitterUrl: string;
     explorers: string[];
-}
+};

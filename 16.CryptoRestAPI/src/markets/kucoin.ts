@@ -10,19 +10,19 @@ export class Kucoin extends Market {
     }
 
     createRequests(): Promise<AxiosResponse<any, any>> {
-        return this.instance.get("/api/v1/prices", { params: { "currencies": coinCodes.join(","), "base": "USD" } });
+        return this.instance.get("/api/v1/prices", { params: { currencies: coinCodes.join(","), base: "USD" } });
     }
 
-    async getData(): Promise<Rate[]> {
+    async getData(): Promise<Rate[] | undefined> {
         let coinsData: Rate[] = [];
-        await this.createRequests().then((result) => {
-            for (const [key, value] of Object.entries(result.data.data)) {
+        try {
+            const { data } = await this.createRequests();
+            for (const [key, value] of Object.entries(data.data)) {
                 coinsData.push({ coinSymbol: key, price: Number(value), baseCurrency: "USD" });
             }
-        }).catch((err) => {
-            throw Error(err.response.data);
-        });
-        return coinsData;
+            return coinsData;
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
-

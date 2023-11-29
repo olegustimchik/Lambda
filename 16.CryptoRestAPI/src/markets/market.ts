@@ -5,10 +5,10 @@ export abstract class Market {
     constructor(url: string, headers: Object) {
         this.instance = axios.create({
             baseURL: url,
-            headers: headers
-        })
+            headers: headers,
+        });
     }
 
     abstract createRequests(): Promise<AxiosResponse>;
-    abstract getData(): Promise<Rate[]>;
+    abstract getData(): Promise<Rate[] | undefined>;
 }

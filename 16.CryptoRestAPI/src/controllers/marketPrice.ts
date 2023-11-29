@@ -1,9 +1,9 @@
-import { MarketPricesService } from "../services/market-prices-service.ts"
-import { MarketService } from "../services/markets-service.ts";
-import { CoinService } from "../services/coin-service.ts";
-import { getMinutesFromPeriod } from "../validation/crypto-currency-info-router-validation.ts";
-import { CurrencyInformation } from "../types/currency-response.ts";
-import express, { NextFunction, Router, Request, Response } from "express";
+import { MarketPricesService } from "../services/marketPrices.ts";
+import { MarketService } from "../services/markets.ts";
+import { CoinService } from "../services/coin.ts";
+import { helper } from "../services/helper.ts";
+import { CurrencyInformation } from "../types/currencyResponse.ts";
+import express, { NextFunction, Router, Request, Response, response } from "express";
 
 export class MarketPricesController {
     private marketPricesService: MarketPricesService;
@@ -21,7 +21,7 @@ export class MarketPricesController {
     onCryptocurrencyInfoGet = async (req: Request, res: Response, next: NextFunction) => {
         const marketParameter = req.query.market?.toString() || "all";
         const coinParameter = req.query.symbol?.toString() || "BTC";
-        const period = getMinutesFromPeriod(req.query.period?.toString() || "15m");
+        const period = helper.getMinutesFromPeriod(req.query.period?.toString() || "15m");
         const coins = coinParameter.split(",");
         try {
             const promises: Promise<CurrencyInformation>[] = [];
@@ -30,30 +30,29 @@ export class MarketPricesController {
             for (const coinCode of coins) {
                 const coin = await this.coinService.selectCoinBySymbol(coinCode);
                 if (marketParameter === "all") {
-                    promises.push(this.marketPricesService.currencyInfo(coin[0], "all", period));
+                    promises.push(this.marketPricesService.selectAverage(coin[0], "all", period));
                 } else if (market !== null) {
-                    promises.push(this.marketPricesService.currencyInfo(coin[0], market[0], period));
+                    promises.push(this.marketPricesService.selectAverage(coin[0], market[0], period));
                 }
             }
-            await Promise.allSettled(promises).then((response) => {
-                response.map((item) => {
-                    console.log(item);
-                    if (item.status === "fulfilled") {
-                        userResponse.push(item.value);
-                    }
-                });
-                if (userResponse.length > 0) {
-                    res.send(userResponse);
-                } else {
-                    res.sendStatus(204);
+            const response = await Promise.allSettled(promises);
+            response.map((item) => {
+                if (item.status === "fulfilled") {
+                    userResponse.push(item.value);
                 }
             });
+            if (userResponse.length > 0) {
+                res.send(userResponse);
+            } else {
+                res.sendStatus(404);
+            }
         } catch (err) {
-            next()
+            console.log(err);
+            res.status(500).json({ message: "Something went wrong, try again" });
         }
-    }
+    };
 
     getRouter = () => {
         return this.router;
-    }
+    };
 }
