@@ -1,12 +1,5 @@
 import { MarketPricesRepository } from "../repositories/marketPrices.ts";
-import {
-    MarketPriceTypeInsert,
-    MarketPriceTypeSelect,
-    CoinTypeInsert,
-    CoinTypeSelect,
-    MarketTypeInsert,
-    MarketTypeSelect,
-} from "../types/tables.ts";
+import { MarketPriceTypeInsert, MarketPriceTypeSelect, CoinTypeInsert, CoinTypeSelect, MarketTypeInsert, MarketTypeSelect } from "../types/tables.ts";
 import { CurrencyInformation } from "../types/currencyResponse.ts";
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2";
 
@@ -34,11 +27,7 @@ export class MarketPricesService {
      * @param period number of minutes
      * @returns average price during the period
      */
-    selectAverage = async (
-        coin: CoinTypeSelect,
-        market: MarketTypeSelect | "all",
-        period: number
-    ): Promise<CurrencyInformation> => {
+    selectAverage = async (coin: CoinTypeSelect, market: MarketTypeSelect | "all", period: number): Promise<CurrencyInformation> => {
         if (market === "all") {
             const marketPricesInf = await this.marketPricesRepository.averagePrice(coin.id, period);
             return {

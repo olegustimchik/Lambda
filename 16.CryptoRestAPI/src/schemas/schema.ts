@@ -1,14 +1,4 @@
-import {
-    mysqlTable,
-    mysqlSchema,
-    AnyMySqlColumn,
-    uniqueIndex,
-    int,
-    varchar,
-    index,
-    decimal,
-    datetime,
-} from "drizzle-orm/mysql-core";
+import { mysqlTable, mysqlSchema, AnyMySqlColumn, uniqueIndex, int, varchar, index, decimal, datetime } from "drizzle-orm/mysql-core";
 
 export const coins = mysqlTable(
     "coins",

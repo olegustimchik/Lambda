@@ -35,9 +35,7 @@ export class MarketPricesRepository {
                 and(
                     eq(marketPrices.marketId, marketId),
                     eq(marketPrices.coinId, coinId),
-                    sql`timestampdiff(minute,${marketPrices.fetchDate},${helper.convertDateToMysqlDate(
-                        new Date()
-                    )}) <= ${period.toString()}`
+                    sql`timestampdiff(minute,${marketPrices.fetchDate},${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
                 )
             )
             .orderBy(desc(marketPrices.fetchDate));
@@ -66,9 +64,7 @@ export class MarketPricesRepository {
                 and(
                     eq(marketPrices.marketId, marketId),
                     eq(marketPrices.coinId, coinId),
-                    sql`timestampdiff(minute,${marketPrices.fetchDate},${helper.convertDateToMysqlDate(
-                        new Date()
-                    )}) <= ${period.toString()}`
+                    sql`timestampdiff(minute,${marketPrices.fetchDate},${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
                 )
             )
             .orderBy(desc(marketPrices.fetchDate));
@@ -87,9 +83,7 @@ export class MarketPricesRepository {
             .where(
                 and(
                     eq(marketPrices.coinId, coinId),
-                    sql`timestampdiff(minute, fetch_date, ${helper.convertDateToMysqlDate(
-                        new Date()
-                    )}) <= ${period.toString()}`
+                    sql`timestampdiff(minute, fetch_date, ${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
                 )
             );
     }

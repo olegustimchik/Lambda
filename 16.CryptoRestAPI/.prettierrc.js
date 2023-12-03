@@ -4,7 +4,7 @@ const config = {
     semi: true,
     singleQuote: false,
     arrowParens: "always",
-    printWidth: 120,
+    printWidth: 150,
 };
 
 export default config;

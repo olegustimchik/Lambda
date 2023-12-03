@@ -1,16 +1,16 @@
 import express, { Express, Request, Response } from "express";
-import { dbConnection } from "./src/connection/db.ts";
-import { CoinRepository } from "./src/repositories/coin.ts";
-import { MarketRepository } from "./src/repositories/market.ts";
-import { MarketPricesRepository } from "./src/repositories/marketPrices.ts";
-import { CoinService } from "./src/services/coin.ts";
-import { MarketService } from "./src/services/markets.ts";
-import { MarketPricesService } from "./src/services/marketPrices.ts";
-import { CoinController } from "./src/controllers/coin.ts";
-import { MarketController } from "./src/controllers/markets.ts";
-import { MarketPricesController } from "./src/controllers/marketPrice.ts";
-import { SaveDataFromMarketController } from "./src/controllers/saveDataFromMarket.ts";
-import { CronScheduler } from "./src/cronFold/job.ts";
+import { dbConnection } from "./src/connection/db.js";
+import { CoinRepository } from "./src/repositories/coin.js";
+import { MarketRepository } from "./src/repositories/market.js";
+import { MarketPricesRepository } from "./src/repositories/marketPrices.js";
+import { CoinService } from "./src/services/coin.js";
+import { MarketService } from "./src/services/markets.js";
+import { MarketPricesService } from "./src/services/marketPrices.js";
+import { CoinController } from "./src/controllers/coin.js";
+import { MarketController } from "./src/controllers/markets.js";
+import { MarketPricesController } from "./src/controllers/marketPrice.js";
+import { SaveDataFromMarketController } from "./src/controllers/saveDataFromMarket.js";
+import { CronScheduler } from "./src/cronFold/job.js";
 import * as dotenv from "dotenv";
 dotenv.config();
 
