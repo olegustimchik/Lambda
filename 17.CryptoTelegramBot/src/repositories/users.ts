@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import Service from "./index.ts";
 
-export class UsersService extends Service {
+export class UsersRepository{
+    private prisma;
     constructor(prisma: PrismaClient) {
-        super(prisma);
+        this.prisma = prisma;
     }
 
-    selectAll = () => {
+    selectAll = async () => {
         return this.prisma.users.findMany();
     }
 

@@ -2,6 +2,7 @@ export type CurrencyDetail = {
     price: string;
     date: number;
 }
+
 type Market = {
     id: number;
     marketName: string;

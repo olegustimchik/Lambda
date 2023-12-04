@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import Service from "./index.ts";
 
-export class FavoriteService extends Service {
+export class FavoriteRepository{
+    private prisma;
     constructor(prisma: PrismaClient) {
-        super(prisma);
+        this.prisma = prisma;
     }
 
-    selectAll = () => {
+    selectAll = async () => {
         return this.prisma.favoriteCryptos.findMany();
     }
 

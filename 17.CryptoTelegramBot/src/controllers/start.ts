@@ -1,6 +1,6 @@
 import { Message } from "node-telegram-bot-api";
 import { bot } from "../bot.ts";
-import { UsersService } from "../services/users-service.ts";
+import { UsersService } from "../services/users.ts";
 import { Controller } from "./controller.ts";
 
 export class StartController extends Controller {
