@@ -30,6 +30,5 @@ test.each([
 ])(`deadline calculation `, ({ lang, mimetype, count, orderDate, expected }) => {
     let priceDeadline = new PriceAndDeadline();
     expect(priceDeadline.createUserResponse(mimetype, count, lang as "en" | "ua/ru", orderDate)).toEqual(expected);
-
 });
 
