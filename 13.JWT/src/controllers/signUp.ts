@@ -15,20 +15,18 @@ export class SighUpController {
                 try {
                         const data = req.body;
                         if (!data.email || !data.password) {
-                                res.status(400).json({ "message": "Request body should contain email ans password" });
-                                return; 
+                                return res.status(400).json({ "message": "Request body should contain email ans password" });
                         }
 
                         const user = await this.usersService.selectByEmail(data.email);
                         if (user !== null) {
-                                res.status(400).json({ "message": "User already exists" });
-                                return; 
+                                return res.status(400).json({ "message": "User already exists" });
                         }
                         const insert = await this.usersService.insertOne(data.email, data.password);
                         if (insert.acknowledged === true) {
-                                res.status(200).json({ "message": "User seccusfully registered" });
-                        } else { 
-                                res.status(500).json({ "message": "Something went wrong" });
+                                return res.status(200).json({ "message": "User successfully registered" });
+                        } else {
+                                return res.status(500).json({ "message": "Something went wrong" });
                         }
 
                 } catch (e) {
@@ -37,7 +35,7 @@ export class SighUpController {
                 }
         }
 
-        getRouter = () => { 
-                return this.router; 
+        getRouter = () => {
+                return this.router;
         }
 }

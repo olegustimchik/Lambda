@@ -17,15 +17,14 @@ export class LoginController {
             const email = req.query.email as string;
             const password = req.query.password as string;
             if (!email || !password) {
-                res.status(400).json({ "message": "Invalid data" }); 
-                return; 
+                return res.status(400).json({ "message": "Invalid data" });
             }
             const rand = randomNumber(30, 60);
             const user = await this.usersService.selectByEmailAndPassword(email, password);
             if (user !== null) {
-                res.send({ "token": jwt.sign({ "email": user.userEmail }, process.env.SECRET, { expiresIn: Math.floor(rand) }), "TTL": Math.floor(rand) });
+                return res.send({ "token": jwt.sign({ "email": user.userEmail }, process.env.SECRET, { expiresIn: Math.floor(rand) }), "TTL": Math.floor(rand) });
             } else {
-                res.status(400).json({"message": "Not registered"});
+                return res.status(400).json({ "message": "Not registered" });
             }
         } catch (e) {
             console.log(e);

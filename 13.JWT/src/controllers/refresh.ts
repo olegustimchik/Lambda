@@ -15,9 +15,9 @@ export class RefreshController {
                 const rand = randomNumber(30, 60);
                 const user = jwt.verify(req.headers.authorization.split(" ")[1], process.env.SECRET);
                 console.log(user); 
-                res.send({ "token": jwt.sign({ "email": user.email }, process.env.SECRET, { expiresIn: Math.floor(rand) }), "TTL": Math.floor(rand) });
+                return res.send({ "token": jwt.sign({ "email": user.email }, process.env.SECRET, { expiresIn: Math.floor(rand) }), "TTL": Math.floor(rand) });
             } else {
-                res.status(400).json({"message": "Authorization header not specified"});
+                return res.status(400).json({"message": "Authorization header not specified"});
             }
         } catch (e) {
             console.log(e);

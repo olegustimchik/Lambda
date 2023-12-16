@@ -12,15 +12,14 @@ export class MeController {
         try {
             const count = req.url.match(/[0-9]/);
             if (!req.headers.authorization) {
-                res.status(400).json({"message": "Authorization header not specified"});
-                return ; 
+                return res.status(400).json({"message": "Authorization header not specified"});
             }
             const user = jwt.verify(req.headers.authorization.split(" ")[1], process.env.SECRET);
             console.log(user, process.env.SECRET);
             if (user) {
-                res.send({ "request_num": Number(count[0]), data: { "login": user.email } });
+                return res.send({ "request_num": Number(count[0]), data: { "login": user.email } });
             } else {
-                res.status(400).json({ "message": "Unauthorized" });
+                return res.status(400).json({ "message": "Unauthorized" });
             }
         } catch (error) {
             console.log(error);
