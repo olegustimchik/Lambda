@@ -17,7 +17,6 @@ export class SaveDataFromMarketController {
     saveDataFromMarket = async <T extends Market>(market: T, marketCode: string) => {
         try {
             const prices = await market.getData();
-
             if (prices === undefined || prices.length < 1) {
                 console.log(marketCode);
                 throw new Error(`No data from ${marketCode}`);

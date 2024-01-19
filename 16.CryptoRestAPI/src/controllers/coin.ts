@@ -8,32 +8,31 @@ export class CoinController {
     constructor(coinService: CoinService) {
         this.coinService = coinService;
         this.router = express.Router();
-        this.router.get("/coins", this.onCoinsGetAll);
-        this.router.get("/coin", this.onCoinGet);
-        this.router.post("/save", this.onPostSave);
+        this.router.get("/coins", this.getAll);
+        this.router.get("/coin", this.getCoin);
+        this.router.post("/save", this.post);
     }
-    onCoinsGetAll = async (req: Request, res: Response, next: NextFunction) => {
+    getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const data = await this.coinService.selectAll();
-            res.send(data);
+            return res.send(data);
         } catch (err) {
             console.log(err);
-            res.sendStatus(500).json({ message: "Something went wrong, try again" });
+            return res.sendStatus(500).json({ message: "Something went wrong, try again" });
         }
     };
 
-    onCoinGet = async (req: Request, res: Response, next: NextFunction) => {
+    getCoin = async (req: Request, res: Response, next: NextFunction) => {
         const coin = req.query.coin?.toString();
         try {
             if (!coin) {
-                res.status(400).json({ message: "Missing coin" });
-                return;
+                return res.status(400).json({ message: "Missing coin" });
             }
-            const coins = await this.coinService.selectCoinBySymbol(coin as string);
+            const coins = await this.coinService.selectCoinBySymbol(coin);
             if (!coins || coins.length < 1) {
-                res.status(404).json({ message: "Coin not found" });
+                return res.status(404).json({ message: "Coin not found" });
             } else {
-                res.send(coins);
+                return res.send(coins);
             }
         } catch (err) {
             console.log(err);
@@ -41,10 +40,10 @@ export class CoinController {
         }
     };
 
-    onPostSave = async (req: Request, res: Response, next: NextFunction) => {
+    post = async (req: Request, res: Response, next: NextFunction) => {
         try {
             this.coinService.saveManyCoins(coinCodes);
-            res.sendStatus(200);
+            return res.sendStatus(200);
         } catch (err) {
             console.log(err);
             res.sendStatus(500).json({ message: "Something went wrong, try again" });

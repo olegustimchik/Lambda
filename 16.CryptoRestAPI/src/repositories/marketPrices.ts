@@ -1,7 +1,7 @@
-import { marketPrices, markets } from "../schemas/schema.ts";
+import { coins, marketPrices, markets } from "../schemas/schema.ts";
 import { MarketPriceTypeInsert, MarketPriceTypeSelect } from "../types/tables.ts";
 import type { MySql2Database, MySqlRawQueryResult } from "drizzle-orm/mysql2";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, inArray } from "drizzle-orm";
 import { helper } from "../services/helper.ts";
 export class MarketPricesRepository {
     private dbConnection: MySql2Database;
@@ -9,15 +9,15 @@ export class MarketPricesRepository {
         this.dbConnection = dbConnection;
     }
 
-    async insertOne(marketPrice: MarketPriceTypeInsert): Promise<void | MySqlRawQueryResult> {
+    insertOne = async (marketPrice: MarketPriceTypeInsert): Promise<void | MySqlRawQueryResult> => {
         return this.dbConnection.insert(marketPrices).values(marketPrice);
     }
 
-    async insertMany(marketPrice: MarketPriceTypeInsert[]): Promise<void | MySqlRawQueryResult> {
+    insertMany = async (marketPrice: MarketPriceTypeInsert[]): Promise<void | MySqlRawQueryResult> => {
         return this.dbConnection.insert(marketPrices).values(marketPrice);
     }
 
-    async selectAll(): Promise<MarketPriceTypeSelect[]> {
+    selectAll = async (): Promise<MarketPriceTypeSelect[]> => {
         return this.dbConnection.select().from(marketPrices).orderBy(marketPrices.fetchDate);
     }
     /**
@@ -27,7 +27,7 @@ export class MarketPricesRepository {
      * @param period default 3. Represent time periods in minutes, 15 minutes
      * @returns prices for passed coinId and marketId. limit default 3 that show price changes for last 15 minute
      */
-    async selectBy(coinId: number, marketId: number, period: number | 15): Promise<MarketPriceTypeSelect[]> {
+    selectBy = async (coinId: number, marketId: number, period: number | 15): Promise<MarketPriceTypeSelect[]> => {
         return this.dbConnection
             .select()
             .from(marketPrices)
@@ -48,11 +48,11 @@ export class MarketPricesRepository {
      * @param period default 3. Represent time periods in minutes, 15 minutes
      * @returns prices for passed coinId and marketId. limit default 3 that show price changes for last 15 minute
      */
-    async selectAverageBy(
+    selectAverageBy = async (
         coinId: number,
         marketId: number,
         period: number | 15
-    ): Promise<{ coinId: number | null; marketId: number | null; price: string }[]> {
+    ): Promise<{ coinId: number | null; marketId: number | null; price: string }[]> => {
         return this.dbConnection
             .select({
                 coinId: marketPrices.coinId,
@@ -76,7 +76,7 @@ export class MarketPricesRepository {
      * @param period default 15. Represent time periods in minutes
      * @returns prices for passed coinId and marketId. limit default 3 that show price changes for last 15 minute
      */
-    async averagePrice(coinId: number, period: number | 15): Promise<{ coinId: number | null; price: string }[]> {
+    averagePrice = async (coinId: number, period: number | 15): Promise<{ coinId: number | null; price: string }[]> => {
         return this.dbConnection
             .select({ coinId: marketPrices.coinId, price: sql<string>`AVG(${marketPrices.price})` })
             .from(marketPrices)
@@ -86,5 +86,30 @@ export class MarketPricesRepository {
                     sql`timestampdiff(minute, fetch_date, ${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
                 )
             );
+    }
+
+    averagePriceJoinCoins = async (coinSymbols: string[], period: number | 15): Promise<{ coinId: number | null; price: string, coinSymbol: string }[]> => {
+        return this.dbConnection
+            .select({ coinId: marketPrices.coinId, price: sql<string>`AVG(${marketPrices.price})`, coinSymbol: coins.coinSymbol })
+            .from(marketPrices).innerJoin(coins, eq(marketPrices.coinId, coins.id))
+            .where(
+                and(
+                    inArray(coins.coinSymbol, coinSymbols),
+                    sql`timestampdiff(minute, fetch_date, ${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
+                )
+            ).groupBy(coins.id);
+    }
+
+    averagePriceByMarketJoinCoins = async (marketId: number, coinSymbols: string[], period: number | 15): Promise<{ coinId: number | null; price: string, coinSymbol: string }[]> => {
+        return this.dbConnection
+            .select({ coinId: marketPrices.coinId, price: sql<string>`AVG(${marketPrices.price})`, coinSymbol: coins.coinSymbol })
+            .from(marketPrices).innerJoin(coins, eq(marketPrices.coinId, coins.id))
+            .where(
+                and(
+                    eq(marketPrices.marketId, marketId),
+                    inArray(coins.coinSymbol, coinSymbols),
+                    sql`timestampdiff(minute, fetch_date, ${helper.convertDateToMysqlDate(new Date())}) <= ${period.toString()}`
+                )
+            ).groupBy(coins.id);
     }
 }

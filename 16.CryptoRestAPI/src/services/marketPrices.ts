@@ -10,14 +10,14 @@ export class MarketPricesService {
     }
 
     insertOne = async (marketPrice: MarketPriceTypeInsert): Promise<void | MySqlRawQueryResult> => {
-        return this.marketPricesRepository.insertOne(marketPrice);
+        return await this.marketPricesRepository.insertOne(marketPrice);
     };
 
     insertMany = async (marketPrices: MarketPriceTypeInsert[]): Promise<void | MySqlRawQueryResult> => {
-        return this.marketPricesRepository.insertMany(marketPrices);
+        return await this.marketPricesRepository.insertMany(marketPrices);
     };
     selectAll = async (): Promise<MarketPriceTypeSelect[]> => {
-        return this.marketPricesRepository.selectAll();
+        return await this.marketPricesRepository.selectAll();
     };
 
     /**
@@ -44,4 +44,25 @@ export class MarketPricesService {
             };
         }
     };
+
+    averagePriceJoinCoins = async (coinSymbols: string[], period: number | 15) => {
+        const rates = (await this.marketPricesRepository.averagePriceJoinCoins(coinSymbols, period)).map((elem) => {
+            return {
+                coin: elem.coinSymbol,
+                coinId: elem.coinId,
+                details: { price: elem.price, date: Date.now() },
+            }
+        });
+        return rates;
+    }
+    averagePriceByMarketJoinCoins = async (marketId: number, coinSymbols: string[], period: number | 15) => {
+        const rates = (await this.marketPricesRepository.averagePriceByMarketJoinCoins(marketId, coinSymbols, period)).map((elem) => {
+            return {
+                coin: elem.coinSymbol,
+                coinId: elem.coinId,
+                details: { price: elem.price, date: Date.now() },
+            }
+        });
+        return rates;
+    }
 }

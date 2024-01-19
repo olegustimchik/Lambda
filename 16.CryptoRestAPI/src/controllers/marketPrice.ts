@@ -15,36 +15,49 @@ export class MarketPricesController {
         this.marketService = marketService;
         this.coinService = coinService;
         this.router = express.Router();
-        this.router.get("/cryptocurrency/info", this.onCryptocurrencyInfoGet);
+        this.router.get("/getRatesByMarket", this.getRatesByMarket);
+        this.router.get("/getRatesByAllMarkets", this.getPriceAllMarkets);
+
     }
 
-    onCryptocurrencyInfoGet = async (req: Request, res: Response, next: NextFunction) => {
-        const marketParameter = req.query.market?.toString() || "all";
-        const coinParameter = req.query.symbol?.toString() || "BTC";
-        const period = helper.getMinutesFromPeriod(req.query.period?.toString() || "15m");
-        const coins = coinParameter.split(",");
+    getPriceAllMarkets = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const promises: Promise<CurrencyInformation>[] = [];
-            const userResponse: CurrencyInformation[] = [];
-            let market = await this.marketService.selectByName(marketParameter);
-            for (const coinCode of coins) {
-                const coin = await this.coinService.selectCoinBySymbol(coinCode);
-                if (marketParameter === "all") {
-                    promises.push(this.marketPricesService.selectAverage(coin[0], "all", period));
-                } else if (market !== null) {
-                    promises.push(this.marketPricesService.selectAverage(coin[0], market[0], period));
-                }
+            const coinParameter = req.query.coins?.toString();
+            const period = helper.getMinutesFromPeriod(req.query.period?.toString() || "15m");
+            if (!coinParameter) {
+                return res.status(400).json({ message: "Missing 'coins' parameter" });
             }
-            const response = await Promise.allSettled(promises);
-            response.map((item) => {
-                if (item.status === "fulfilled") {
-                    userResponse.push(item.value);
-                }
-            });
-            if (userResponse.length > 0) {
-                res.send(userResponse);
+            const userResponse = await this.marketPricesService.averagePriceJoinCoins(coinParameter.split(","), period);
+            if (!userResponse) {
+                return res.status(400).json({ "message": "Don't have this coins in database" });
             } else {
-                res.sendStatus(404);
+                return res.send(userResponse);
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: "Something went wrong, try again" });
+        }
+
+    }
+
+    getRatesByMarket = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const marketParameter = req.query.market?.toString();
+            const coinParameter = req.query.coins?.toString();
+            const period = helper.getMinutesFromPeriod(req.query.period?.toString() || "15m");
+            if (!coinParameter || !marketParameter) {
+                return res.status(400).json({ message: "Missing 'coins' or 'market' parameter" });
+            }
+            const coins = coinParameter.split(",");
+            let market = (await this.marketService.selectByName(marketParameter))[0];
+            if (!market){ 
+                return res.status(400).json({ message: "Market not found"}); 
+            }
+            const rates = await this.marketPricesService.averagePriceByMarketJoinCoins(market.id, coins, period); 
+            if (!rates || rates.length < 0 ) { 
+                return res.status(400).json({ "message": "Don't have this coins in database" });
+            } else { 
+                return res.send(rates); 
             }
         } catch (err) {
             console.log(err);
