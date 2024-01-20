@@ -21,9 +21,10 @@ export class DeleteFavoriteController extends Controller {
         const chatId = msg.chat.id;
         if (coin === undefined) {
             bot.sendMessage(chatId, "Invalid input");
+            return; 
         }
         try {
-            const coins = await this.dataGetter.getCoinBySymbol(coin as string);
+            const coins = await this.dataGetter.getCoinBySymbol(coin);
             if (coins === undefined || coins.length < 1) {
                 bot.sendMessage(chatId, "Can't delete this coin from favorite list");
                 return; 

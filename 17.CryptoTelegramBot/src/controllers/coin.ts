@@ -23,33 +23,29 @@ export class CoinController extends Controller {
         const coin = match?.input.split("/")[1];
         const chatId = msg.chat.id;
         try {
-            if (coin === undefined) {
+            if (typeof coin !== "string") {
                 bot.sendMessage(chatId, "Invalid input");
+                return;
             }
-            const coins = await this.dataGetter.getCoinBySymbol(coin as string);
+            const coins = await this.dataGetter.getCoinBySymbol(coin);
             if (coins === undefined || coins.length < 1) {
                 bot.sendMessage(chatId, "There is no information about this coin");
                 return;
-            } else {
-                const prices: string[] = [];
-                const promises: Promise<string[] | undefined>[] = [];
-                periods.forEach((period) => {
-                    promises.push(this.dataGetter.getCoinsPrice([coin as string], period));
-                });
-                const result = await Promise.allSettled(promises);
-                result.forEach((item) => {
-                    if (item.status === "fulfilled" && item.value !== undefined) {
-                        prices.push(item.value[0]);
-                    }
-                });
-                bot.sendMessage(chatId, prices.join("\n"), {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{ text: "Add to Favorite", callback_data: `add_${coin}` }],
-                            [{ text: "Remove from Favorite", callback_data: `remove_${coin}` }]]
-                    }
-                });
             }
+            const promises: Promise<string[] | undefined>[] = [];
+            periods.forEach((period) => {
+                promises.push(this.dataGetter.getOnlyCoinPrice([coin], period));
+            });
+            const prices = await Promise.all(promises);
+            console.log(prices); 
+            bot.sendMessage(chatId, prices.join("\n"), {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: "Add to Favorite", callback_data: `add_${coin}` }],
+                        [{ text: "Remove from Favorite", callback_data: `remove_${coin}` }]]
+                }
+            });
+
         } catch (err) {
             bot.sendMessage(chatId, "Something went wrong, try again");
         }
@@ -60,22 +56,26 @@ export class CoinController extends Controller {
         const action = answer?.split("_")[0];
         const coin = answer?.split("_")[1];
         try {
-            const coinFromAPI = await this.dataGetter.getCoinBySymbol(coin as string)
+            if (typeof coin !== "string") {
+                bot.sendMessage(msg.from.id, "bad command");
+                return;
+            }
+            const coinFromAPI = await this.dataGetter.getCoinBySymbol(coin)
             if (action === "add" && coinFromAPI !== undefined && coinFromAPI.length >= 1) {
                 const user = await this.userService.insertOne(msg.from.id);
-                const res = await this.favoriteService.insertToFavorite(user.id, coin?.toUpperCase() as string);
+                const res = await this.favoriteService.insertToFavorite(user.id, coin.toUpperCase());
                 bot.sendMessage(msg.from.id, `${coin} added to your favorite list.To view the list use /list_favorite command`)
-                console.log(res); 
+                console.log(res);
             } else if (action === "remove" && coinFromAPI !== undefined && coinFromAPI.length >= 1) {
                 const user = await this.userService.insertOne(msg.from.id);
-                const res = await this.favoriteService.deleteByUserIdAndCoinSymbol(user.id, coin?.toUpperCase() as string);
+                const res = await this.favoriteService.deleteByUserIdAndCoinSymbol(user.id, coin.toUpperCase());
                 bot.sendMessage(msg.from.id, "coin removed from favorite list.To view the list use /list_favorite command")
                 console.log(res);
             }
         } catch (err) {
             console.log(err);
             if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
-                bot.sendMessage(msg.from.id, "Can't add this coin already in your favorite list. To view the list use /list_favorite command");
+                bot.sendMessage(msg.from.id, "Can't add, this coin already in your favorite list. To view the list use /list_favorite command");
             }
         }
 

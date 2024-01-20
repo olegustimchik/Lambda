@@ -10,7 +10,7 @@ export class UsersRepository{
         return this.prisma.users.findMany();
     }
 
-    getById = (id: number) => {
+    getById = async (id: number) => {
         return this.prisma.users.findUnique({ where: { id: id } });
     }
 

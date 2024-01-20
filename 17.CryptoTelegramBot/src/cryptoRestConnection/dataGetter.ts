@@ -38,7 +38,7 @@ export class DataGetter {
     getCoinsPrice = async (coins: string[], period: string) => {
         const data: string[] = [];
         try {
-            const response = await this.instance.get("/cryptocurrency/info", { params: { "symbol": coins.join(","), "period": period } });
+            const response = await this.instance.get("/getRatesByAllMarkets", { params: { "coins": coins.join(","), "period": period } });
             if (response.status === 200) {
                 response.data.forEach((coin: { "coin": string, "details": { "price": string } }) => {
                     data.push(`/${coin.coin} ${Number(coin.details.price)}`);
@@ -53,7 +53,7 @@ export class DataGetter {
     getOnlyCoinPrice = async (coins: string[], period: string) => {
         const prices: string[] = [];
         try {
-            const response = await this.instance.get("/cryptocurrency/info", { params: { "symbol": coins.join(","), "period": period } });
+            const response = await this.instance.get("/getRatesByAllMarkets", { params: { "coins": coins.join(","), "period": period } });
             if (response.status === 200) {
                 response.data?.forEach((coin: { "coin": string, "details": { "price": string } }) => {
                     prices.push(`${period}: ${Number(coin.details.price)}`);

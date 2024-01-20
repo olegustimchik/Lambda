@@ -9,7 +9,7 @@ export class UsersService {
         return this.usersRepository.selectAll();
     }
 
-    getById = (id: number) => {
+    getById = async (id: number) => {
         return this.usersRepository.getById(id);
     }
 
